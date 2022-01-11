@@ -1,0 +1,11 @@
+.idea/
+.DS_Store
+.eslintcache
+
+# RN
+app/node_modules/
+app/.expo/
+app/.expo-shared/
+app/.tmp/
+npm-debug.*
+web-build/
