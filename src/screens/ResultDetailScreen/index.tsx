@@ -9,6 +9,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { observer } from 'mobx-react';
 import { ProcessStore, TResult } from '~/stores/ProcessStore';
+// import { Doughnut } from 'react-chartjs-2';
+import { PieChart, Pie, Cell } from 'recharts';
+
 
 export type TSite = {
   title: string;
@@ -39,18 +42,31 @@ export default function ResultDetailScreen({ route }: { route?: any }) {
 }
 
 const Result = observer(() => {
+
+  // const make_data = () => {
+  const data = [
+    { name: 'Geeksforgeeks', students: 400 },
+    { name: 'Technical scripter', students: 700 },
+    { name: 'Geek-i-knack', students: 200 },
+    { name: 'Geek-o-mania', students: 1000 }
+  ];
+
+
+  //   return data;
+  // }
   // const processStore = ProcessStore.getInstance();
   // const sites = ProcessStore.result;
   return (
     <View style={{ backgroundColor: 'transparent' }}>
       <Text style={styles.textTitle}>업로드 일시</Text>
       <Text style={styles.textDetail}>{ProcessStore.result.uploaded_at?.split('T')[0] + ' ' + ProcessStore.result.uploaded_at?.split('T')[1].split('.')[0]}</Text>
-    
-      <Text style={styles.textTitle}>예측 일시</Text>
-      <Text style={styles.textDetail}>{ProcessStore.result.predicted_at?.split('T')[0] + ' ' + ProcessStore.result.predicted_at?.split('T')[1].split('.')[0]}</Text>
       
       <Text style={styles.textTitle}>회복가능성</Text>
       <Text style={styles.textDetail}>{`${(ProcessStore.result.prediction ?? 0)*100} %`}</Text>
+
+      <PieChart width={700} height={700}>
+        <Pie data={data} dataKey="students" outerRadius={250} innerRadius={150} fill="green" />
+      </PieChart>
 
       <Text style={styles.textTitle}>Loudness</Text>
       <Text style={styles.textDetail}>{`${ProcessStore.result.loudness}`}</Text>
@@ -78,6 +94,7 @@ const Result = observer(() => {
     // />
   );
 })
+
 
 
 const CardResult = ({ item, status }: { item: TResult, status: string }) => (

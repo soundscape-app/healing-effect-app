@@ -47,10 +47,13 @@ const LoginScreen = observer(() => {
         <RowButton
           title="Sign Up"
           onPress={() => {
-            alert("계정 생성은 개발자에게 문의해주세요. 추후 기능 추가 예정입니다. \n(ymjoo12@hanyang.ac.kr)")
+            alert("계정 생성은 개발자에게 문의해주세요. \n(ymjoo12@hanyang.ac.kr)")
             // navigation.navigate(RouteName.Register);
           }}
         />
+        <Text style={{ textAlign: 'center', margin: 50 }}>
+          {"Account for Testing: \nUsername: test \nPassword: qwer1234!"}
+        </Text>
     </View>
   );
 });

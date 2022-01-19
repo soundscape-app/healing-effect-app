@@ -15,6 +15,7 @@ import UploadScreen from '~/screens/UploadScreen';
 import SurveyScreen from '~/screens/SurveyScreen';
 import ProfileScreen from '~/screens/ProfileScreen';
 import ResultDetailScreen from '~/screens/ResultDetailScreen';
+import CheckMicScreen from '~/screens/CheckMicScreen';
 
 import { RootStackParamList } from '~/types';
 import BottomTabNavigator from './BottomTabNavigator';
@@ -54,6 +55,7 @@ function RootNavigator() {
       <Stack.Screen name={RouteName.Survey} component={SurveyScreen} options={NormalOption} />
       <Stack.Screen name={RouteName.Profile} component={ProfileScreen} options={NormalOption} />
       <Stack.Screen name={RouteName.ResultDetail} component={ResultDetailScreen} options={NormalOption} />
+      <Stack.Screen name={RouteName.CheckMic} component={CheckMicScreen} options={NormalOption} />
     </Stack.Navigator>
   );
 }

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Text, View } from '~/components/Themed';
 import { Navigation } from '~/utils';
-import { RouteName } from '~/common';
+import { RouteName, Config } from '~/common';
 
 import { AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import AuthStore from '~/stores/AuthStore';
@@ -30,7 +30,7 @@ const MyPageScreen = observer(() => {
               <RowButton
                 title="Help"
                 icon={<Feather name="help-circle" size={24} color="black" />}
-                onPress={() => alert("준비중인 기능입니다. (version: 1.0.0)")}
+                onPress={() => alert(`준비중인 기능입니다. (version: ${Config.APP_VERSION})`)}
               />
             </View>
           </>
@@ -48,7 +48,7 @@ const MyPageScreen = observer(() => {
               <RowButton
                 title="Help"
                 icon={<Feather name="help-circle" size={24} color="black" />}
-                onPress={() => alert("준비중인 기능입니다. (version: 1.0.0)")}
+                onPress={() => alert(`준비중인 기능입니다. (version: ${Config.APP_VERSION})`)}
               />
               <RowButton
                 title="Logout"

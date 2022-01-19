@@ -22,6 +22,7 @@ export default function HomeScreen() {
         onPress={() => {
           if (!AuthStore.isLogin) {
             Alert.alert('Please login first');
+            navigation.navigate(RouteName.Login);
           } else {
             navigation.navigate(RouteName.Upload);
           }
@@ -30,6 +31,17 @@ export default function HomeScreen() {
       <TileButton
         title="Recording Guide"
       />
+      {/* <TileButton
+        title="Check Mic Level"
+        onPress={() => {
+          if (!AuthStore.isLogin) {
+            Alert.alert('Please login first');
+            navigation.navigate(RouteName.Login);
+          } else {
+            navigation.navigate(RouteName.CheckMic);
+          }
+        }}
+      /> */}
     </View>
   );
 }

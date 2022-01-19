@@ -9,3 +9,4 @@ app/.expo-shared/
 app/.tmp/
 npm-debug.*
 web-build/
+node_modules

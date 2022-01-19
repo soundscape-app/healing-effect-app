@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import { Request } from '~/utils';
+import { Constants } from '~/common';
 import axios from 'axios';
 
 export type TVideo = {
@@ -33,6 +34,10 @@ export const ProcessStore = observable({
         } as TVideo,
         revisitation: 0,
         loudness: 0,
+        device: {
+            brand: '',
+            model: '',
+        } as any,
     },
 
     fetchResults: action(async () => {
@@ -59,6 +64,10 @@ export const ProcessStore = observable({
             },
             revisitation: 0,
             loudness: 0,
+            device: {
+                brand: Constants.device.brand,
+                model: Constants.device.model,
+            }
         }
     }),
 

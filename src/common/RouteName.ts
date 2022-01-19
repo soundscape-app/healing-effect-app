@@ -15,4 +15,5 @@ export default {
   Upload: 'Upload',
   Survey: 'Survey',
   ResultDetail: 'ResultDetail',
+  CheckMic: 'CheckMic',
 };

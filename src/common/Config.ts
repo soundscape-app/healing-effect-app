@@ -1,6 +1,6 @@
 import ExpoConstants from 'expo-constants';
 
-const SERVER_URL = 'http://localhost:8000';
+const SERVER_URL = 'http://soundscape.kro.kr:8000';
 
 export default {
   SERVER_URL,

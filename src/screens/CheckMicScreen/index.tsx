@@ -9,7 +9,7 @@ import * as Device from 'expo-device';
 
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { Video, AVPlaybackStatus } from 'expo-av';
+import { Video, Audio, AVPlaybackStatus } from 'expo-av';
 
 import { Text, View } from '~/components/Themed';
 import { BaseStyle, RouteName } from '~/common';
@@ -18,7 +18,7 @@ import { AntDesign, MaterialCommunityIcons, Feather, Entypo } from '@expo/vector
 import AuthStore from '~/stores/AuthStore';
 import { TVideo, ProcessStore } from '~/stores/ProcessStore';
 
-const UploadScreen = observer(() => {
+const CheckMic = observer(() => {
   const navigation = useNavigation();
   const [video, setVideo] = React.useState(null as any);
   const [player, setPlayer] = React.useState(() => {});
@@ -33,6 +33,17 @@ const UploadScreen = observer(() => {
       }
     })();
   }, []);
+
+  const recordAudio = async () => {
+    try {
+      const { recording: recordingObject, status } = await Audio.Recording.createAsync(
+        Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+      );
+      // You are now recording!
+    } catch (error) {
+      // An error occurred!
+    }
+  };
 
   const pickVideo = async () => {
     const allowedExtensions = ['mp4', 'mov', 'avi', 'mkv', 'flv', 'wmv'];
@@ -182,7 +193,7 @@ const VideoData = ({ video }: { video: any }) => {
   )
 }
 
-export default UploadScreen;
+export default CheckMic;
 
 const styles = StyleSheet.create({
   container: {
