@@ -94,6 +94,7 @@ export const ProcessStore = observable({
         formData.append("video", ProcessStore.data.video);
         formData.append("revisitation", ProcessStore.data.revisitation);
         formData.append("loudness", ProcessStore.data.loudness);
+        formData.append("device", Constants.device.brand + '_' + Constants.device.model);
         const res = (await Request.post('/upload/video', formData));
         const video_id = res.video_id;
         ProcessStore.resetData();
