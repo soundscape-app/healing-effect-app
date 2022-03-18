@@ -31,7 +31,7 @@ export type TSite = {
   prediction: number;
 }
 
-export default function ResultDetailScreen({ route }: { route?: any }) {
+function ResultDetailScreen({ route }: { route?: any }) {
   const { video_id } = route.params;
 
   React.useEffect(() => {
@@ -129,61 +129,7 @@ const AudioInfo = ({ audio }: { audio: any }) => {
   )
 }
 
-
-
-const CardResult = ({ item, status }: { item: TResult, status: string }) => (
-  <TouchableOpacity
-    activeOpacity={0.8}
-    // onPress={() => alert('처리 중입니다')}
-    style={styles.shadow}
-  >
-    <View 
-      style={styles.card}
-      // colors={['#01ABC7', '#03C7C9']}
-      // end={{ x: 1, y: 1 }}
-    >
-      <Image 
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 30,
-          backgroundColor: 'rgba(0,0,0,0.2)',
-        }}
-        source={{ uri: item.thumbnail }}
-      />
-      <View
-        style={{
-          justifyContent: 'flex-start',
-          alignItems: 'flex-start',
-          flex: 1,
-          height: '100%',
-          marginHorizontal: 15,
-          backgroundColor: 'transparent',
-      }}>
-        <Text style={styles.textTitle}>
-          {status}
-        </Text>
-        <Text style={styles.textDetail}>
-          {item.uploaded_at?.split('T')[0] + '\n' + item.uploaded_at?.split('T')[1].split('.')[0]}
-        </Text>
-        {/* <Text style={styles.textTitle}>
-          Detail
-        </Text>
-        <Text style={styles.textDetail}>
-          장소의 세부정보
-        </Text> */}
-      </View>
-      <CircularProgress 
-        // style={{ width: 100 }}
-        radius={50}
-        value={(item.prediction ?? 0)*100}
-        valueSuffix={'%'}
-        activeStrokeColor={(item?.prediction ?? 0)*100 > 50 ? '#2ecc71' : 'orange'}
-      />
-
-    </View>
-  </TouchableOpacity>
-)
+export default observer(ResultDetailScreen);
 
 ResultDetailScreen.navigationOptions = {
   headerTitle: 'Result',
