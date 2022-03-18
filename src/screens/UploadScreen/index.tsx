@@ -55,13 +55,14 @@ const UploadScreen = observer(() => {
     }
   };
 
-  const saveVideo = () => {
+  const uploadVideo = async () => {
     const video_data = {
       uri: video.uri,
       type: video.type + '/' + video.extension,
       name: String(Date.now()) + '.' + video.extension,
     } as TVideo;
     ProcessStore.setVideo(video_data);
+    // if (!ProcessStore.isUploading) await ProcessStore.upload();
   }
 
   return (
@@ -102,8 +103,8 @@ const UploadScreen = observer(() => {
         icon={<Entypo name="upload-to-cloud" size={24} color="black" />}
         onPress={() => {
           if (video !== null && video.uri !== null) {
-            saveVideo();
-            navigation.goBack();
+            uploadVideo();
+            // navigation.goBack();
             navigation.navigate(RouteName.Survey);
           } else {
             Alert.alert("Please select a video file")

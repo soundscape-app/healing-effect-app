@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import EditScreenInfo from '~/components/EditScreenInfo';
 import { Text, View } from '~/components/Themed';
@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { observer } from 'mobx-react';
 import { runInAction } from 'mobx';
 import { ProcessStore, TResult } from '~/stores/ProcessStore';
+import AuthStore from '~/stores/AuthStore';
 import { RouteName } from '~/common'
 
 export type TSite = {
@@ -21,18 +22,32 @@ export type TSite = {
 
 export default function ResultScreen() {
 
-  React.useEffect(() => {
-    // setInterval(() => {
-      runInAction(() => {
-        ProcessStore.fetchResults();
-      })
-      console.log('fetching results');
-    // }, 30000)
-  },[ProcessStore.results])
+  // React.useEffect(() => {
+  //   // setInterval(() => {
+  //     // runInAction(() => {
+  //       ProcessStore.fetchResults();
+  //     // })
+  //     // console.log('fetching results');
+  //   // }, 30000)
+  // },[ProcessStore.results])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // const unsubscribe = API.subscribe(userId, user => setUser(user));
+      // runInAction(() => {
+        if (AuthStore.isLogin) {
+          console.log('fetching results');
+          ProcessStore.fetchResults();
+        }
+      // })
+
+      // return () => unsubscribe();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Result</Text>
+      <Text style={styles.title}>Results</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       {/* <EditScreenInfo path="/screens/ResultScreen.tsx" /> */}
       {/* <CircleProgress progress={95}/> */}
@@ -61,7 +76,8 @@ const Results = observer(() => {
           // prediction={item.prediction}
         />
         // <Text>{item.video_id}</Text>
-      )}
+        )}
+      ListEmptyComponent={() => <Text>There are no videos.</Text>}
 
       // keyExtractor={item => item.title}
     />

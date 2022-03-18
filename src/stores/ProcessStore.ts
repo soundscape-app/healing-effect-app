@@ -26,6 +26,7 @@ export type TResult = {
 export const ProcessStore = observable({
     results: [] as TResult[],
     result: {} as TResult,
+    isUploading: false,
     data: {
         video: {
             uri: '',
@@ -39,9 +40,30 @@ export const ProcessStore = observable({
             model: '',
         } as any,
     },
+    survey: {} as any,
+
+    init: action(() => {
+        ProcessStore.results = [] as TResult[];
+        ProcessStore.result = {} as TResult;
+        ProcessStore.isUploading = false;
+        ProcessStore.data = {
+            video: {
+                uri: '',
+                name: '',
+                type: ''
+            } as TVideo,
+            revisitation: 0,
+            loudness: 0,
+            device: {
+                brand: '',
+                model: '',
+            } as any,
+        };
+        ProcessStore.survey = {} as any;
+    }),
 
     fetchResults: action(async () => {
-        const res = (await Request.get('/process'));
+        const res = (await Request.get('/result'));
         console.log(res)
         ProcessStore.results = res;
     }),
@@ -51,7 +73,7 @@ export const ProcessStore = observable({
     }),
 
     fetchResult: action(async (video_id: number) => {
-        const res = (await Request.get('/process/video', { video_id }));
+        const res = (await Request.get('/result'));
         ProcessStore.result = res;
     }),
 
@@ -84,6 +106,7 @@ export const ProcessStore = observable({
 
     upload: action(async () => {
         console.log('uploading...');
+        ProcessStore.isUploading = true;
 
         let results = ProcessStore.results;
         results.push({ video_id: -1, status: 'ready' });
@@ -95,6 +118,7 @@ export const ProcessStore = observable({
         formData.append("revisitation", ProcessStore.data.revisitation);
         formData.append("loudness", ProcessStore.data.loudness);
         formData.append("device", Constants.device.brand + '_' + Constants.device.model);
+        formData.append("survey", ProcessStore.survey);
         const res = (await Request.post('/upload/video', formData));
         const video_id = res.video_id;
         ProcessStore.resetData();
@@ -104,7 +128,9 @@ export const ProcessStore = observable({
         console.log('uploaded');
 
         ProcessStore.process(index);
-        ProcessStore.fetchResults();
+        // ProcessStore.fetchResults();
+
+        ProcessStore.isUploading = false;
 
         return video_id;
     }),
@@ -114,7 +140,7 @@ export const ProcessStore = observable({
 
         const video_id = ProcessStore.results[index].video_id;
         // ProcessStore.results[index].status = 'processing';
-        const res = (await Request.get('/process/video', { video_id }));
+        const res = (await Request.get('/result/video', { video_id }));
         let result = ProcessStore.results[index];
         // result = { ...res, status: 'done' };
         // ProcessStore.results[index] = result;

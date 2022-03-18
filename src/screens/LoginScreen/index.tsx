@@ -47,8 +47,8 @@ const LoginScreen = observer(() => {
         <RowButton
           title="Sign Up"
           onPress={() => {
-            alert("계정 생성은 개발자에게 문의해주세요. \n(ymjoo12@hanyang.ac.kr)")
-            // navigation.navigate(RouteName.Register);
+            // alert("계정 생성은 개발자에게 문의해주세요. \n(ymjoo12@hanyang.ac.kr)")
+            navigation.navigate(RouteName.Register);
           }}
         />
         <Text style={{ textAlign: 'center', margin: 50 }}>

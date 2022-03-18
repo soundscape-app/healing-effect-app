@@ -1,3 +1,4 @@
 export default {
     LOGIN_TOKEN: 'LOGIN_TOKEN',
+    INSTALL_IDENTIFIER: 'INSTALL_IDENTIFIER',
 };

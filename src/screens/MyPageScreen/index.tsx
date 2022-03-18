@@ -9,6 +9,7 @@ import { RouteName, Config } from '~/common';
 
 import { AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import AuthStore from '~/stores/AuthStore';
+import UserStore from '~/stores/UserStore';
 import { action } from 'mobx';
 
 const MyPageScreen = observer(() => {
@@ -36,7 +37,7 @@ const MyPageScreen = observer(() => {
           </>
         ) : (
           <>
-            <Text style={styles.title}>{'Welcome!\n' + AuthStore.userInfo.username}</Text>
+            <Text style={styles.title}>{'Welcome!\n' + UserStore.userInfo.username}</Text>
             <View style={{ marginTop: 30, backgroundColor: 'transparent' }}>
               <RowButton
                 title="My Profile"

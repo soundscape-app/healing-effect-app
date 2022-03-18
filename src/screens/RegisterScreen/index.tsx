@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { Text, View } from '~/components/Themed';
-import { BaseStyle } from '~/common';
+import { BaseStyle, RouteName } from '~/common';
 
 import { AntDesign, MaterialCommunityIcons, Feather, Entypo } from '@expo/vector-icons';
 import AuthStore from '~/stores/AuthStore';
@@ -14,64 +14,53 @@ import AuthStore from '~/stores/AuthStore';
 const RegisterScreen = observer(() => {
   const navigation = useNavigation();
 
-  const [name, setName] = React.useState('');
-  const [pw, setPw] = React.useState('');
-  const [pwcfm, setPwcfm] = React.useState('');
+  // const [name, setName] = React.useState('');
+  // const [pw, setPw] = React.useState('');
+  // const [pwcfm, setPwcfm] = React.useState('');
+
+  const [profile, setProfile] = React.useState({
+    username: '',
+    password: '',
+    password2: '',
+  });
 
   return (
     <View style={styles.container}>
       <RowInput
-        title="Name"
-        icon={<Entypo name="email" size={24} color="black" />}
-      />
-      {/* <RowInput
-        title="E-mail"
-        icon={<Entypo name="email" size={24} color="black" />}
-      />
-      <RowInput
-        title="E-mail"
-        icon={<Entypo name="email" size={24} color="black" />}
-      /> */}
-      <RowInput
-        title="Password"
-        isPrivate={true}
-        icon={<MaterialCommunityIcons name="form-textbox-password" size={24} color="black" />}
+        title="Username"
+        icon={<Entypo name="user" size={24} color="black" />}
+        value={profile.username}
+        setValue={(value: string) => setProfile({ ...profile, username: value })}
       />
       <RowInput
         title="Password"
         isPrivate={true}
         icon={<MaterialCommunityIcons name="form-textbox-password" size={24} color="black" />}
+        value={profile.password}
+        setValue={(value: string) => setProfile({ ...profile, password: value })}
       />
+      <RowInput
+        title="Confirm Password"
+        isPrivate={true}
+        icon={<MaterialCommunityIcons name="form-textbox-password" size={24} color="black" />}
+        value={profile.password2}
+        setValue={(value: string) => setProfile({ ...profile, password2: value })}
+      />
+      {profile.password !== profile.password2 && <Text style={{ fontSize: 12, color: 'red' }}>The password confirmation does not match.</Text>}
         <RowButton
           title="Sign Up"
-          onPress={() => {
-            action(() => AuthStore.isLogin = true)();
-            navigation.goBack();
+          onPress={async () => {
+            const message = await AuthStore.register(profile.username, profile.password);
+            if (message) {
+              Alert.alert(message);
+            } else {
+              navigation.navigate(RouteName.MyPage);
+            }
           }}
         />
     </View>
   );
 });
-
-const RowItem = ({ title, isEnd = false }: { title: string, isEnd?: boolean }) => (
-  <>
-    <TouchableOpacity 
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 10,
-        backgroundColor: 'transparent'
-      }}
-      activeOpacity={0.8}
-      onPress={() => alert('해당 페이지로 이동')}
-    >
-      <Text style={{ fontSize: 20 }}>{title}</Text>
-      <AntDesign name="right" size={24} color="black" />
-    </TouchableOpacity>
-    {!isEnd && <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />}
-  </>
-)
 
 const RowInput = ({ title, icon = null, isPrivate = false, value, setValue }: { title: string, icon?: any, isPrivate?: boolean, value: string, setValue: any }) => (
   <View
@@ -145,7 +134,7 @@ export default RegisterScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
     // paddingTop: 20,

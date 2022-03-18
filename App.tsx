@@ -33,7 +33,7 @@ export default function App() {
     //   }
     // }
 
-    if (__DEV__) {
+    if (!__DEV__) {
       updateAsync({ reload: true });
     } else {
       // console.log("Sentry.init");

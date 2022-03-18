@@ -10,6 +10,7 @@ import { BaseStyle } from '~/common';
 
 import { AntDesign, MaterialCommunityIcons, Feather, Entypo } from '@expo/vector-icons';
 import AuthStore from '~/stores/AuthStore';
+import UserStore from '~/stores/UserStore';
 
 const mockData = {
   name: "Youngmin joo",
@@ -20,31 +21,54 @@ const mockData = {
 }
 
 const ProfileScreen = observer(() => {
+
+  React.useEffect(() => {
+    UserStore.fetchProfile().then();
+  },[])
+
   const navigation = useNavigation();
+  const [editable, setEditable] = React.useState(false);
+  const [userInfo, setUserInfo] = React.useState(UserStore.userInfo);
   return (
     <View style={styles.container}>
       <RowItem
         title="Name"
-        value={mockData.name}
+        value={userInfo.username}
+        editable={editable}
+        onChange={(value: string) => setUserInfo({ ...userInfo, username: value })}
         // icon={<Entypo name="email" size={24} color="black" />}
       />
       <RowItem
+        title="Gender"
+        value={UserStore.userInfo.gender ?? editable ? "" : "-"}
+        editable={editable}
+        onChange={(value: string) => setUserInfo({ ...userInfo, gender: value })}
+      // icon={<Entypo name="email" size={24} color="black" />}
+      />
+      <RowItem
+        title="Age"
+        value={String(userInfo.age ?? editable ? "" : "-")}
+        editable={editable}
+        onChange={(value: string) => setUserInfo({ ...userInfo, age: Number(value) })}
+      // icon={<Entypo name="email" size={24} color="black" />}
+      />
+      {/* <RowItem
         title="E-mail"
         value={mockData.email}
         // icon={<Entypo name="email" size={24} color="black" />}
-      />
-      <RowDetail
+      /> */}
+      {/* <RowDetail
         title="Address"
         onPress={() => {
 
         }}
-      />
-      <RowDetail
+      /> */}
+      {/* <RowDetail
         title="TCI-RS"
         onPress={() => {
 
         }}
-      />
+      /> */}
       {/* <RowInput
         title="E-mail"
         icon={<Entypo name="email" size={24} color="black" />}
@@ -60,8 +84,9 @@ const ProfileScreen = observer(() => {
         icon={<MaterialCommunityIcons name="form-textbox-password" size={24} color="black" />}
       /> */}
         <RowButton
-          title="Edit"
+          title={editable ? "Save" : "Edit"}
           onPress={() => {
+            setEditable(!editable);
             // action(() => AuthStore.isLogin = true)();
             // navigation.goBack();
           }}
@@ -104,13 +129,27 @@ const RowDetail = ({ title, icon = null, onPress = null }: { title: string, icon
   </TouchableOpacity>
 )
 
-const RowItem = ({ title, value = "", icon = null, isPrivate = false }: { title: string, value?: string, icon?: any, isPrivate?: boolean }) => (
+const RowItem = ({ title, value = "", icon = null, isPrivate = false, editable = false, onChange = () => {} }: { title: string, value?: string, icon?: any, isPrivate?: boolean, editable?: boolean, onChange: any }) => (
   <View
     style={[styles.rowItem, styles.shadow]}
   >
     <Text style={{ fontSize: 15, fontWeight: 'bold', width: 60 }}>{title}</Text>
     <View style={{ height: 15, width: 1, borderWidth: 1, borderColor: 'black' }}/>
-    <Text style={{ fontSize: 15, fontWeight: 'bold', flex: 1, paddingHorizontal: 10 }}>{value}</Text>
+    {
+      editable ? (
+        <TextInput
+          style={{ fontSize: 15, fontWeight: 'bold', flex: 1, paddingHorizontal: 10 }}
+          secureTextEntry={isPrivate}
+          autoCapitalize="none"
+          placeholder={title}
+          hitSlop={{ top: 30, left: 30, bottom: 30, right: 30 }}
+          value={value}
+          onChangeText={onChange}
+        />
+      ) : (
+        <Text style={{ fontSize: 15, fontWeight: 'bold', flex: 1, paddingHorizontal: 10 }}>{value}</Text>
+      )
+    }
     {icon}
   </View>
 )
