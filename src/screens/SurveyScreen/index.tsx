@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Button, ScrollView, Text, TextInput, View } from 'react-native';
 import { SimpleSurvey } from 'react-native-simple-survey';
 import { COLORS } from '~/common/validColors';
-import { BaseStyle, RouteName } from '~/common';
+import { BaseStyle, RouteName, Device } from '~/common';
 
 import { ProcessStore } from '~/stores/ProcessStore';
 
@@ -326,8 +326,8 @@ export default class SurveyScreen extends Component {
         <Button
           title={data.optionText}
           onPress={onPress}
-          color={isSelected ? 'white' : 'gray'}
-          // style={isSelected ? { fontWeight: 'bold' } : {}}
+          color={isSelected ? (Device.isIphone ? 'white' : POINT) : 'gray'}
+          style={{ color: 'white' }}
           key={`button_${index}`}
         />
       </View>
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     marginBottom: 20,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     elevation: 20,
     borderRadius: 10,
   },
@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
   },
   selectionGroupContainer: {
     flexDirection: 'column',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     alignContent: 'flex-end',
   },
   background: {
@@ -478,11 +478,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(204,204,204,1)',
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderRadius: 4,
     textAlign: 'center',
 
     padding: 10,
-    textAlignVertical: 'top',
+    // textAlignVertical: 'center',
     marginLeft: 10,
     marginRight: 10
   },

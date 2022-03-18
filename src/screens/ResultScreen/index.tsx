@@ -122,18 +122,15 @@ const CardResult = observer(({ item, status }: { item: TResult, status: string }
             marginHorizontal: 15,
             backgroundColor: 'transparent',
         }}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', lineHeight: 20, marginTop: 10 }}>
+            {item.scape_name}
+          </Text>
           <Text style={styles.textTitle}>
             {status}
           </Text>
           <Text style={styles.textDetail}>
             {item.uploaded_at?.split('T')[0] + '\n' + item.uploaded_at?.split('T')[1].split('.')[0]}
           </Text>
-          {/* <Text style={styles.textTitle}>
-            Detail
-          </Text>
-          <Text style={styles.textDetail}>
-            장소의 세부정보
-          </Text> */}
         </View>
         <CircularProgress 
           // style={{ width: 100 }}
@@ -185,7 +182,6 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     fontSize: 14,
     fontWeight: 'bold',
-    marginTop: 10,
     color: '#01ABC7',
   },
   textDetail: {

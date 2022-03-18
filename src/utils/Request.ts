@@ -16,7 +16,7 @@ const Request = {
   },
   get: async (url: string, params: any = {}) => {
     let data = {} as any;
-    await axios.get(Config.DEV_SERVER_URL + url, { params })
+    await axios.get(Config.SERVER_URL + url, { params })
       .then(response => {
         data = response.data;
       })
@@ -27,7 +27,7 @@ const Request = {
   },
   post: async (url: string, body: any = {}) => {
     let data = {} as any;
-    await axios.post<any>(Config.DEV_SERVER_URL + url, body)
+    await axios.post<any>(Config.SERVER_URL + url, body)
       .then(response => {
         data = response.data;
       })
@@ -39,7 +39,7 @@ const Request = {
   login: async (url: string, body: any = {}) => {
     let token = "";
     let message = "";
-    await axios.post<any>(Config.DEV_SERVER_URL + url, body)
+    await axios.post<any>(Config.SERVER_URL + url, body)
       .then(response => {
         token = response.headers['token'] ?? "";
       })

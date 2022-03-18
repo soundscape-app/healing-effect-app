@@ -7,11 +7,23 @@ import { Text, View } from '~/components/Themed';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { BaseStyle } from '~/common';
+
 import { observer } from 'mobx-react';
 import { ProcessStore, TResult } from '~/stores/ProcessStore';
 // import { Doughnut } from 'react-chartjs-2';
-import { PieChart, Pie, Cell } from 'recharts';
+// import { PieChart, Pie, Cell } from 'recharts';
 
+// import PieChart from 'react-native-pie-chart';
+
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph
+} from 'react-native-chart-kit'
+import { ScrollView } from 'react-native-gesture-handler';
 
 export type TSite = {
   title: string;
@@ -28,72 +40,94 @@ export default function ResultDetailScreen({ route }: { route?: any }) {
 
   return (
     <View style={styles.container}>
-      
-      {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
-      {/* <EditScreenInfo path="/screens/ResultDetailScreen.tsx" /> */}
-      {/* <CircleProgress progress={95}/> */}
-      {/* <CardResult percent={72.2} status={0} />
-      <CardResult percent={84.1} status={1} /> */}
-      <Result />
-      {/* <CardResult percent={35.4} /> */}
-      {/* <Text>{ProcessStore.result.uploaded_at}</Text> */}
+      <ScrollView style={{ backgroundColor: 'transparent', paddingVertical: 10 }}>
+        <Text style={styles.textTitle}>업로드 일시</Text>
+        <Text style={styles.textDetail}>{ProcessStore.result.uploaded_at?.split('T')[0] + ' ' + ProcessStore.result.uploaded_at?.split('T')[1].split('.')[0]}</Text>
+        <View style={{ height: 10, backgroundColor: 'transparent' }} />
+
+        <Text style={styles.textTitle}>회복가능성</Text>
+        <Text style={{ ...styles.textDetail, fontWeight: 'bold', fontSize: 28, lineHeight: 32 }}>
+          {`${((ProcessStore.result.prediction ?? 0) * 100).toFixed(2)} %`}
+        </Text>
+        <View style={{ height: 10, backgroundColor: 'transparent' }} />
+
+        <Text style={styles.textTitle}>Color Ratio</Text>
+        <ColorRatio segment={ProcessStore.result.video_data?.segment} />
+        <View style={{ height: 10, backgroundColor: 'transparent' }} />
+
+        <Text style={styles.textTitle}>Audio Level</Text>
+        <AudioInfo audio={ProcessStore.result.video_data?.audio} />
+      </ScrollView>
     </View>
   );
 }
 
-const Result = observer(() => {
 
-  // const make_data = () => {
+const ColorRatio = ({ segment }: { segment: any }) => {
+  if (!segment) return <Text style={styles.textDetail}>(None)</Text>;
+
+  const greenRatio = (segment.Green * 10000);
+  const greyRatio = (10000 - (segment.Green + segment.Sky) * 10000);
+  const skyRatio = (segment.Sky * 10000);
+
   const data = [
-    { name: 'Geeksforgeeks', students: 400 },
-    { name: 'Technical scripter', students: 700 },
-    { name: 'Geek-i-knack', students: 200 },
-    { name: 'Geek-o-mania', students: 1000 }
-  ];
+    { name: 'Green', ratio: greenRatio, color: '#4CAF50', legendFontColor: 'black', legendFontSize: 15 },
+    { name: 'Grey', ratio: greyRatio, color: 'grey', legendFontColor: 'black', legendFontSize: 15 },
+    { name: 'Sky', ratio: skyRatio, color: '#2196F3', legendFontColor: 'black', legendFontSize: 15 },
+  ]
 
+  const screenWidth = BaseStyle.layout.window.width - 50;
+  const chartConfig = {
+    backgroundGradientFrom: '#1E2923',
+    backgroundGradientTo: '#08130D',
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
+  }
 
-  //   return data;
-  // }
-  // const processStore = ProcessStore.getInstance();
-  // const sites = ProcessStore.result;
   return (
-    <View style={{ backgroundColor: 'transparent' }}>
-      <Text style={styles.textTitle}>업로드 일시</Text>
-      <Text style={styles.textDetail}>{ProcessStore.result.uploaded_at?.split('T')[0] + ' ' + ProcessStore.result.uploaded_at?.split('T')[1].split('.')[0]}</Text>
-      
-      <Text style={styles.textTitle}>회복가능성</Text>
-      <Text style={styles.textDetail}>{`${(ProcessStore.result.prediction ?? 0)*100} %`}</Text>
+    <PieChart
+      data={data}
+      width={screenWidth}
+      height={150}
+      chartConfig={chartConfig}
+      accessor="ratio"
+      backgroundColor="transparent"
+      paddingLeft="15"
+    />
+  )
+}
 
-      <PieChart width={700} height={700}>
-        <Pie data={data} dataKey="students" outerRadius={250} innerRadius={150} fill="green" />
-      </PieChart>
+const AudioInfo = ({ audio }: { audio: any }) => {
 
-      <Text style={styles.textTitle}>Loudness</Text>
-      <Text style={styles.textDetail}>{`${ProcessStore.result.loudness}`}</Text>
+  const data = {
+    labels: ['laeq', 'lceq', 'leq'],
+    datasets: [{
+      data: [audio?.laeq ?? 0, audio?.lceq ?? 0, audio?.leq ?? 0],
+    }]
+  }
 
-      <Text style={styles.textTitle}>Revisitation</Text>
-      <Text style={styles.textDetail}>{`${ProcessStore.result.revisitation}`}</Text>
+  const chartConfig = {
+    backgroundGradientFrom: '#01ABC7',
+    backgroundGradientTo: '#015E6E',
+    color: (opacity = 0) => `rgba(173, 243, 255, ${opacity})`
+  }
 
-    </View>
-    // <FlatList
-    //   data={ProcessStore.result}
-    //   renderItem={({ item, index }) => (
-    //     <CardResult
-    //       key={index}
-    //       status={item.status}
-    //       item={item}
+  const screenWidth = BaseStyle.layout.window.width - 50;
+  const graphStyle = {
+    marginVertical: 8,
+    borderRadius: 20,
+    padding: 10,
+  }
 
-          
-    //       // title={item.title}
-    //       // detail={item.detail}
-    //       // prediction={item.prediction}
-    //     />
-    //     // <Text>{item.video_id}</Text>
-    //   )}
-    //   // keyExtractor={item => item.title}
-    // />
-  );
-})
+  return (
+    <BarChart
+      style={graphStyle}
+      data={data}
+      width={screenWidth}
+      height={200}
+      chartConfig={chartConfig}
+    />
+  )
+}
 
 
 
@@ -162,7 +196,6 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // justifyContent: 'center',
     paddingHorizontal: 15,
-    paddingTop: 10,
     backgroundColor: '#D1DBE3',
   },
   title: {

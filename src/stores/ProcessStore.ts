@@ -13,6 +13,7 @@ export type TStatus = 'ready' | 'uploaded' | 'processing' | 'done' | 'error';
 
 export type TResult = {
     video_id: number;
+    scape_name?: string;
     prediction?: number;
     revisitation?: number;
     loudness?: number;
@@ -72,8 +73,12 @@ export const ProcessStore = observable({
         console.log(ProcessStore.results)
     }),
 
+    resetResult: action(() => {
+        ProcessStore.result = {} as TResult;
+    }),
+
     fetchResult: action(async (video_id: number) => {
-        const res = (await Request.get('/result'));
+        const res = (await Request.get(`/result/${video_id}`));
         ProcessStore.result = res;
     }),
 
@@ -118,14 +123,14 @@ export const ProcessStore = observable({
         formData.append("revisitation", ProcessStore.data.revisitation);
         formData.append("loudness", ProcessStore.data.loudness);
         formData.append("device", Constants.device.brand + '_' + Constants.device.model);
-        formData.append("survey", ProcessStore.survey);
+        formData.append("survey", JSON.stringify(ProcessStore.survey));
         const res = (await Request.post('/upload/video', formData));
         const video_id = res.video_id;
         ProcessStore.resetData();
 
         ProcessStore.results[index] = { video_id, status: 'uploaded', uploaded_at: res.uploaded_at };
 
-        console.log('uploaded');
+        console.log('uploaded', video_id);
 
         ProcessStore.process(index);
         // ProcessStore.fetchResults();
@@ -140,7 +145,7 @@ export const ProcessStore = observable({
 
         const video_id = ProcessStore.results[index].video_id;
         // ProcessStore.results[index].status = 'processing';
-        const res = (await Request.get('/result/video', { video_id }));
+        const res = (await Request.get('/process/video', { video_id }));
         let result = ProcessStore.results[index];
         // result = { ...res, status: 'done' };
         // ProcessStore.results[index] = result;
