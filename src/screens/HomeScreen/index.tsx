@@ -30,6 +30,9 @@ export default function HomeScreen() {
       />
       <TileButton
         title="Recording Guide"
+        onPress={() => {
+          Alert.alert('준비 중인 기능입니다. (~v1.0.4)');
+        }}
       />
       {/* <TileButton
         title="Check Mic Level"

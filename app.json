@@ -47,7 +47,8 @@
     "plugins": [
       "expo-document-picker",
       "expo-image-picker",
-      "expo-av"
+      "expo-av",
+      "sentry-expo"
     ]
   }
 }

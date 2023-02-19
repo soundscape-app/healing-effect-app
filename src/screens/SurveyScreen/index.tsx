@@ -6,6 +6,8 @@ import { BaseStyle, RouteName, Device } from '~/common';
 
 import { ProcessStore } from '~/stores/ProcessStore';
 
+// TODO : 설문조사 native forms로 변경하기.
+
 const POINT = '#05595B';
 const BG = 'gray';
 
