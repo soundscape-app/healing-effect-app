@@ -10,7 +10,6 @@ import { BaseStyle, RouteName } from '~/common';
 
 import { AntDesign, MaterialCommunityIcons, Feather, Entypo } from '@expo/vector-icons';
 import AuthStore from '~/stores/AuthStore';
-import { debug } from '~/utils';
 
 const LoginScreen = observer(() => {
   const navigation = useNavigation();

@@ -52,7 +52,7 @@ function RootNavigator() {
       <Stack.Screen name={RouteName.Login} component={LoginScreen} options={NormalOption} />
       <Stack.Screen name={RouteName.Register} component={RegisterScreen} options={NormalOption} />
       <Stack.Screen name={RouteName.Upload} component={UploadScreen} options={NormalOption} />
-      {/* <Stack.Screen name={RouteName.Survey} component={SurveyScreen} options={NormalOption} /> 문제가 있음. */}
+      <Stack.Screen name={RouteName.Survey} component={SurveyScreen} options={NormalOption} />
       <Stack.Screen name={RouteName.Profile} component={ProfileScreen} options={NormalOption} />
       <Stack.Screen name={RouteName.ResultDetail} component={ResultDetailScreen} options={NormalOption} />
       <Stack.Screen name={RouteName.CheckMic} component={CheckMicScreen} options={NormalOption} />

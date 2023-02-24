@@ -45,7 +45,7 @@ const UploadScreen = observer(() => {
 
     console.log(result);
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       const uri = result.uri;
       const extension = uri.split('.').reverse()[0].toLowerCase();
       if (allowedExtensions.includes(extension)) {
@@ -68,12 +68,17 @@ const UploadScreen = observer(() => {
   return (
     <View style={styles.container}>
       <TileButton
+        title='Next'
+        icon={<AntDesign name="arrowright" size={24} color="black" />}
+        onPress={() => navigation.navigate(RouteName.Survey)}
+      />
+      <TileButton
         title="Select file"
         icon={<Entypo name="folder-video" size={24} color="black" />}
         onPress={pickVideo}
       />
-      <Video
-        // ref={video}
+      {/* <Video
+        ref={video}
         style={{
           borderRadius: 20,
           borderWidth: 1,
@@ -96,7 +101,7 @@ const UploadScreen = observer(() => {
         //     <Text style={{ color: 'black' }}>Your video preview will be displayed here.</Text>
         //   </View>
         // }
-      />
+      /> */}
       <VideoData video={video}/>
       <TileButton
         title="Upload & Next"
@@ -107,7 +112,7 @@ const UploadScreen = observer(() => {
             // navigation.goBack();
             navigation.navigate(RouteName.Survey);
           } else {
-            Alert.alert("Please select a video file")
+            Alert.alert("Please select a video file");
           }
         }}
       />
