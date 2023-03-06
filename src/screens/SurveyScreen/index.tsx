@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, ScrollView, Text, TextInput, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import NativeForms from "native-forms";
+import { RouteName } from '~/common';
+import { ProcessStore } from '~/stores/ProcessStore';
 
 const Survey = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <NativeForms 
         formJSON={require('./sound-scape-survey.json')}
-        onClose={() => {}}
-        onSend={() => {}}
+        onClose={() => { navigation.goBack() }}
+        onSend={async (surveyData : any) => {
+          console.log(surveyData);
+          ProcessStore.survey = surveyData;
+          await ProcessStore.upload();
+          navigation.navigate( RouteName.Result );
+        }}
       />
     </View>
   );

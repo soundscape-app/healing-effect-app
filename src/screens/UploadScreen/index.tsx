@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Device from 'expo-device';
 
 import * as DocumentPicker from 'expo-document-picker';
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker/src/ImagePicker';
 import { Video, AVPlaybackStatus } from 'expo-av';
 
 import { Text, View } from '~/components/Themed';
@@ -36,48 +36,54 @@ const UploadScreen = observer(() => {
 
   const pickVideo = async () => {
     const allowedExtensions = ['mp4', 'mov', 'avi', 'mkv', 'flv', 'wmv'];
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+    // let result = await ImagePicker.launchImageLibraryAsync({
+    //   mediaTypes: ImagePicker.MediaTypeOptions.All,
+    //   allowsEditing: true,
+    //   aspect: [4, 3],
+    //   quality: 1,
+    // });
 
+    // console.log(result);
+
+    // if (!result.canceled) {
+    //   const uri = result.uri;
+    //   const extension = uri.split('.').reverse()[0].toLowerCase();
+    //   if (allowedExtensions.includes(extension)) {
+    //     setVideo({...result, extension });
+    //   }
+    //   else Alert.alert("Please select a video file ('mp4', 'mov', 'avi', 'mkv', 'flv', 'wmv')")
+    // }
+
+    const result = await DocumentPicker.getDocumentAsync();
     console.log(result);
 
-    if (!result.canceled) {
-      const uri = result.uri;
+    if (result?.type === 'success') {
+      const uri = result?.uri;
       const extension = uri.split('.').reverse()[0].toLowerCase();
-      if (allowedExtensions.includes(extension)) {
-        setVideo({...result, extension });
-      }
-      else Alert.alert("Please select a video file ('mp4', 'mov', 'avi', 'mkv', 'flv', 'wmv')")
+
+      if (allowedExtensions.includes(extension)) setVideo({ ...result, extension });
+      else Alert.alert("Please select a video file ('mp4', 'mov', 'avi', 'mkv', 'flv', 'wmv')");
     }
   };
 
   const uploadVideo = async () => {
     const video_data = {
       uri: video.uri,
-      type: video.type + '/' + video.extension,
+      type: video.mimeType,
       name: String(Date.now()) + '.' + video.extension,
     } as TVideo;
     ProcessStore.setVideo(video_data);
     // if (!ProcessStore.isUploading) await ProcessStore.upload();
-  }
+  };
 
   return (
     <View style={styles.container}>
-      <TileButton
-        title='Next'
-        icon={<AntDesign name="arrowright" size={24} color="black" />}
-        onPress={() => navigation.navigate(RouteName.Survey)}
-      />
       <TileButton
         title="Select file"
         icon={<Entypo name="folder-video" size={24} color="black" />}
         onPress={pickVideo}
       />
-      {/* <Video
+      <Video
         ref={video}
         style={{
           borderRadius: 20,
@@ -101,7 +107,7 @@ const UploadScreen = observer(() => {
         //     <Text style={{ color: 'black' }}>Your video preview will be displayed here.</Text>
         //   </View>
         // }
-      /> */}
+      />
       <VideoData video={video}/>
       <TileButton
         title="Upload & Next"
@@ -169,18 +175,18 @@ const VideoData = ({ video }: { video: any }) => {
         ...styles.shadow,
       }}
     >
-      <RowData title="Width" data={
+      {/* <RowData title="Width" data={
         !!video?.width ? video?.width + " px" : null
       } />
       <RowData title="Height" data={
         !!video?.height ? video?.height + " px" : null
-      }/>
+      }/> */}
       <RowData title="Orientation" data={
         !_.isNull(video?.rotation) ? (video?.rotation%180 > 0 ? "Vertical" : "Horizontal") : null
       }/>
-      <RowData title="Duration" data={
+      {/* <RowData title="Duration" data={
         !!video?.duration ? video?.duration/1000 + " sec" : null
-      }/>
+      }/> */}
       <RowData title="Extension" data={video?.extension} />
       <RowData title="Device" data={Device.modelName} />
     </View>
